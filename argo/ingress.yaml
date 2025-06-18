@@ -14,30 +14,36 @@ metadata:
     #alb.ingress.kubernetes.io/force-target-group-creation: "true"
     #alb.ingress.kubernetes.io/target-group-name: argoalb-tg
     external-dns.alpha.kubernetes.io/hostname: argoalb.xfm.sws.siemens.com
-    alb.ingress.kubernetes.io/target-group-attributes: >-
-      deregistration_delay.timeout_seconds=120
     alb.ingress.kubernetes.io/target-type: ip
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/actions.stable-canary: |
       {
-        "Type": "forward",
-        "ForwardConfig": {
-          "TargetGroups": [
+        "type": "forward",
+        "forwardConfig": {
+          "targetGroups": [
             {
-              "ServiceName": "stable-svc",
-              "ServicePort": "80",
-              "Weight": 100
+              "serviceName": "stable-svc",
+              "servicePort": "80",
+              "weight": 100
             },
             {
-              "ServiceName": "canary-svc",
-              "ServicePort": "80",
-              "Weight": 0
+              "serviceName": "canary-svc",
+              "servicePort": "80",
+              "weight": 0
             }
           ]
         }
       }
     alb.ingress.kubernetes.io/conditions.stable-canary: |
-      [{"field":"http-header","httpHeaderConfig":{"httpHeaderName": "X-Canary", "values":["true"]}}]
+      [
+        {
+          "field": "http-header",
+          "httpHeaderConfig": {
+            "httpHeaderName": "X-Canary",
+            "values": ["true"]
+          }
+        }
+      ]
 spec:
   rules:
   - http:
