@@ -28,27 +28,32 @@ spec:
             name: stable
             port:
               number: 80
+
 ---
 apiVersion: networking.k8s.io/v1
-kind: Ingress
+kind: IngressClassParams
 metadata:
-  name: canary-ingress
-  annotations:
-    kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/scheme: internal
-    alb.ingress.kubernetes.io/group.name: "canary-group"
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/conditions.stable: |
-      [{"field":"http-header","httpHeaderConfig":{"httpHeaderName": "X-Env", "values":["canary"]}}]
+  name: my-app-alb-params
 spec:
+  group:
+    name: canary-group
   rules:
-  - http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
+    - priority: 1
+      conditions:
+        - field: http-header
+          httpHeaderConfig:
+            httpHeaderName: "X-Env"
+            values:
+              - "canary"
+      forward:
+        targetGroup:
+          serviceRef:
             name: canary
-            port:
-              number: 80 
+            port: 80
+    - priority: 2
+      forward:
+        targetGroup:
+          serviceRef:
+            name: stable
+            port: 80 
               
