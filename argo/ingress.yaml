@@ -37,15 +37,7 @@ metadata:
         }
       }
     alb.ingress.kubernetes.io/conditions.stable-canary: |
-      [
-        {
-          "Field": "http-header",
-          "HttpHeaderConfig": {
-            "HttpHeaderName": "X-Canary",
-            "Values": ["true"]
-          }
-        }
-      ]
+      [{"field":"http-header","httpHeaderConfig":{"httpHeaderName": "X-Canary", "values":["true"]}}]
 spec:
   rules:
   - http:
