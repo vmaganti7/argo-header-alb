@@ -14,15 +14,23 @@ spec:
     spec:
       containers:
       - name: header-based-app
-        image: nginx:latest
+        image: nginx:1.20.0  # Replace with your image
+        ports:
+        - containerPort: 80
   strategy:
     canary:
-      canaryService: header-based-canary-svc  # Only canary service
-      stableService: header-based-stable-svc   # Only stable service
+      canaryService: canary-svc
+      stableService: stable-svc
       trafficRouting:
         alb:
           ingress: header-based-ingress
           servicePort: 80
       steps:
       - setWeight: 20
-      - pause: {duration: 1h}
+      - pause: {duration: 30m}
+      - setWeight: 40
+      - pause: {duration: 30m}
+      - setWeight: 60
+      - pause: {duration: 30m}
+      - setWeight: 80
+      - pause: {duration: 30m}
