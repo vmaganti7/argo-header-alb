@@ -1,0 +1,33 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: header-based-root-svc
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: header-based-app
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: header-based-stable-svc
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: header-based-app
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: header-based-canary-svc
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: header-based-app
