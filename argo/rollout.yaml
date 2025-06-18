@@ -1,37 +1,32 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
-  name: header-based-rollout
+  name: my-app-rollout
 spec:
-  replicas: 3
+  replicas: 4
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+      - pause: {duration: 1h}
+      - setWeight: 40
+      - pause: {duration: 1h}
+      - setWeight: 60
+      - pause: {duration: 1h}
+      - setWeight: 80
+      - pause: {duration: 1h}
+      canaryService: canary
+      stableService: stable
   selector:
     matchLabels:
-      app: header-based-app
+      app: my-app
   template:
     metadata:
       labels:
-        app: header-based-app
+        app: my-app
     spec:
       containers:
-      - name: header-based-app
-        image: nginx:1.28.0  # Replace with your image
+      - name: my-app
+        image: nginx:latest
         ports:
-        - containerPort: 80
-  strategy:
-    canary:
-      canaryService: canary-svc
-      stableService: stable-svc
-      trafficRouting:
-        alb:
-          ingress: header-based-ingress
-          servicePort: 80
-          annotationPrefix: stable-canary
-      steps:
-      - setWeight: 20
-      - pause: {}
-      - setWeight: 40
-      - pause: {}
-      - setWeight: 60
-      - pause: {}
-      - setWeight: 80
-      - pause: {}
+        - containerPort: 8080
