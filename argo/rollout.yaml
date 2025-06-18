@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: header-based-app
-        image: nginx:1.20.0  # Replace with your image
+        image: nginx:latest  # Replace with your image
         ports:
         - containerPort: 80
   strategy:
