@@ -25,13 +25,13 @@ spec:
         alb:
           ingress: header-based-ingress
           servicePort: 80
-          annotationPrefix: canary-split
+          annotationPrefix: header-based-route
       steps:
       - setWeight: 20
-      - pause: {duration: 30m}
+      - pause: {}
       - setWeight: 40
-      - pause: {duration: 30m}
+      - pause: {}
       - setWeight: 60
-      - pause: {duration: 30m}
+      - pause: {}
       - setWeight: 80
-      - pause: {duration: 30m}
+      - pause: {}
