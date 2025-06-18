@@ -17,12 +17,34 @@ metadata:
       deregistration_delay.timeout_seconds=120
     alb.ingress.kubernetes.io/target-type: ip
     kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/actions.stable-route: >
-      {"type":"forward","forwardConfig":{"targetGroups":[{"serviceName":"header-based-stable-svc","servicePort":80,"weight":100}]}}
-    alb.ingress.kubernetes.io/actions.canary-route: >
-      {"type":"forward","forwardConfig":{"targetGroups":[{"serviceName":"header-based-canary-svc","servicePort":80,"weight":100}]}}
-    alb.ingress.kubernetes.io/conditions.canary-route: >
-      [{"field":"http-header","httpHeaderConfig":{"httpHeaderName":"X-Canary","values":["true"]}}]
+    alb.ingress.kubernetes.io/actions.header-based-route: |
+      {
+        "Type": "forward",
+        "ForwardConfig": {
+          "TargetGroups": [
+            {
+              "ServiceName": "stable-svc",
+              "ServicePort": "80",
+              "Weight": 100
+            },
+            {
+              "ServiceName": "canary-svc",
+              "ServicePort": "80",
+              "Weight": 0
+            }
+          ]
+        }
+      }
+    alb.ingress.kubernetes.io/conditions.header-based-route: |
+      [
+        {
+          "Field": "http-header",
+          "HttpHeaderConfig": {
+            "HttpHeaderName": "X-Canary",
+            "Values": ["true"]
+          }
+        }
+      ]
 spec:
   rules:
   - http:
@@ -31,13 +53,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: stable-route
-            port:
-              number: 80
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: canary-route
+            name: stable-svc
             port:
               number: 80
