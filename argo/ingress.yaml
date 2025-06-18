@@ -18,7 +18,7 @@ metadata:
       deregistration_delay.timeout_seconds=120
     alb.ingress.kubernetes.io/target-type: ip
     kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/actions.header-based-route: |
+    alb.ingress.kubernetes.io/actions.stable-canary: |
       {
         "Type": "forward",
         "ForwardConfig": {
@@ -36,7 +36,7 @@ metadata:
           ]
         }
       }
-    alb.ingress.kubernetes.io/conditions.header-based-route: |
+    alb.ingress.kubernetes.io/conditions.stable-canary: |
       [
         {
           "Field": "http-header",
@@ -54,6 +54,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: header-based-route
+            name: stable-canary
             port:
               number: 80
