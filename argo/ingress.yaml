@@ -54,6 +54,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: canary-svc
+            name: header-based-route
             port:
               number: 80
