@@ -24,7 +24,7 @@ spec:
       trafficRouting:
         alb:
           ingress: header-based-ingress
-          servicePort: 80
+          servicePort: 443
           annotationPrefix: stable-canary
       steps:
       - setWeight: 20
