@@ -54,6 +54,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: stable-svc
+            name: canary-svc
             port:
               number: 80
