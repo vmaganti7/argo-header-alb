@@ -3,26 +3,7 @@ kind: Rollout
 metadata:
   name: header-based-rollout
 spec:
-  replicas: 5
-  strategy:
-    canary:
-      canaryService: header-based-canary-svc
-      stableService: header-based-stable-svc
-      trafficRouting:
-        alb:
-          ingress: header-based-ingress
-          rootService: header-based-root-svc
-          servicePort: 80
-      steps:
-      - setWeight: 20
-      - pause: {duration: 1h}
-      - setWeight: 40
-      - pause: {duration: 1h}
-      - setWeight: 60
-      - pause: {duration: 1h}
-      - setWeight: 80
-      - pause: {duration: 1h}
-  revisionHistoryLimit: 2
+  replicas: 3
   selector:
     matchLabels:
       app: header-based-app
@@ -34,5 +15,14 @@ spec:
       containers:
       - name: header-based-app
         image: nginx:latest
-        ports:
-        - containerPort: 8080
+  strategy:
+    canary:
+      canaryService: header-based-canary-svc  # Only canary service
+      stableService: header-based-stable-svc   # Only stable service
+      trafficRouting:
+        alb:
+          ingress: header-based-ingress
+          servicePort: 80
+      steps:
+      - setWeight: 20
+      - pause: {duration: 1h}
