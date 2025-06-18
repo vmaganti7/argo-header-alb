@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: header-based-ingress
+  name: stable-ingress
   annotations:
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: '10'
     #alb.ingress.kubernetes.io/load-balancer-attributes: routing.http2.enabled=true
@@ -11,39 +11,12 @@ metadata:
     alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-FS-1-2-Res-2020-10
     alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:eu-central-1:238720913587:certificate/0e9fab66-7031-46dd-9014-7a445bc70880"
     alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/group.name: "canary-group"
     #alb.ingress.kubernetes.io/force-target-group-creation: "true"
     #alb.ingress.kubernetes.io/target-group-name: argoalb-tg
     external-dns.alpha.kubernetes.io/hostname: argoalb.xfm.sws.siemens.com
     alb.ingress.kubernetes.io/target-type: ip
     kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/actions.stable-canary: |
-      {
-        "type": "forward",
-        "forwardConfig": {
-          "targetGroups": [
-            {
-              "serviceName": "stable-svc",
-              "servicePort": "80",
-              "weight": 100
-            },
-            {
-              "serviceName": "canary-svc",
-              "servicePort": "80",
-              "weight": 0
-            }
-          ]
-        }
-      }
-    alb.ingress.kubernetes.io/conditions.stable-canary: |
-      [
-        {
-          "field": "http-header",
-          "httpHeaderConfig": {
-            "httpHeaderName": "X-Canary",
-            "values": ["true"]
-          }
-        }
-      ]
 spec:
   rules:
   - http:
@@ -52,6 +25,30 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: stable-canary
+            name: stable
             port:
               number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: canary-ingress
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/group.name: "canary-group"
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/conditions.stable: |
+      [{"field":"http-header","httpHeaderConfig":{"httpHeaderName": "X-Env", "values":["canary"]}}]
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: canary
+            port:
+              number: 80 
+              
