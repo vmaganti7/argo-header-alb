@@ -8,10 +8,11 @@ metadata:
     alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '3'
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-FS-1-2-Res-2020-10
+    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:eu-central-1:238720913587:certificate/0e9fab66-7031-46dd-9014-7a445bc70880"
     alb.ingress.kubernetes.io/scheme: internal
     alb.ingress.kubernetes.io/force-target-group-creation: "true"
-    alb.ingress.kubernetes.io/target-group-name: argoistio-tg
-    external-dns.alpha.kubernetes.io/hostname: argoistio.xfm.sws.siemens.com
+    alb.ingress.kubernetes.io/target-group-name: argoalb-tg
+    external-dns.alpha.kubernetes.io/hostname: argoalb.xfm.sws.siemens.com
     alb.ingress.kubernetes.io/target-group-attributes: >-
       deregistration_delay.timeout_seconds=120
     alb.ingress.kubernetes.io/target-type: ip
