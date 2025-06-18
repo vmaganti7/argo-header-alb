@@ -9,8 +9,6 @@ spec:
     targetPort: 80
     protocol: TCP
     name: http
-  selector:
-    app: header-based-app
 ---
 apiVersion: v1
 kind: Service
@@ -22,5 +20,3 @@ spec:
     targetPort: 80
     protocol: TCP
     name: http
-  selector:
-    app: header-based-app
