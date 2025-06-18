@@ -25,6 +25,7 @@ spec:
         alb:
           ingress: header-based-ingress
           servicePort: 80
+          annotationPrefix: canary-split
       steps:
       - setWeight: 20
       - pause: {duration: 30m}
