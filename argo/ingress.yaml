@@ -4,7 +4,7 @@ metadata:
   name: header-based-ingress
   annotations:
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: '10'
-    alb.ingress.kubernetes.io/load-balancer-attributes: routing.https.enabled=true
+    alb.ingress.kubernetes.io/load-balancer-attributes: routing.http2.enabled=true
     alb.ingress.kubernetes.io/healthcheck-path: /
     alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '3'
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
