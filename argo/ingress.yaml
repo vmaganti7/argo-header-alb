@@ -1,0 +1,42 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: header-based-ingress
+  annotations:
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '10'
+    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '3'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-FS-1-2-Res-2020-10
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/force-target-group-creation: "true"
+    alb.ingress.kubernetes.io/target-group-name: argoistio-tg
+    external-dns.alpha.kubernetes.io/hostname: argoistio.xfm.sws.siemens.com
+    alb.ingress.kubernetes.io/target-group-attributes: >-
+      deregistration_delay.timeout_seconds=120
+    alb.ingress.kubernetes.io/target-type: ip
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/actions.stable-route: >
+      {"type":"forward","forwardConfig":{"targetGroups":[{"serviceName":"header-based-stable-svc","servicePort":80,"weight":100}]}}
+    alb.ingress.kubernetes.io/actions.canary-route: >
+      {"type":"forward","forwardConfig":{"targetGroups":[{"serviceName":"header-based-canary-svc","servicePort":80,"weight":100}]}}
+    alb.ingress.kubernetes.io/conditions.canary-route: >
+      [{"field":"http-header","httpHeaderConfig":{"httpHeaderName":"X-Canary","values":["true"]}}]
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: stable-route
+            port:
+              number: 80
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: canary-route
+            port:
+              number: 80
