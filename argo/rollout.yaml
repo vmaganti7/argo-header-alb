@@ -25,7 +25,7 @@ spec:
         alb:
           ingress: header-based-ingress
           servicePort: 80
-          annotationPrefix: header-based-route
+          annotationPrefix: stable-canary
       steps:
       - setWeight: 20
       - pause: {}
