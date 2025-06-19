@@ -65,4 +65,4 @@ spec:
           service:
             name: canary
             port:
-              number: use-annotation            
+              number: 80            
