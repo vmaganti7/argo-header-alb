@@ -8,7 +8,7 @@ spec:
     blueGreen:
       activeService: stable
       previewService: canary
-      autoPromotionEnabled: false
+      autoPromotionEnabled: true
       autoPromotionSeconds: 30
       scaleDownDelaySeconds: 30
   selector:
