@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: stable-index
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+      <head><title>Stable</title></head>
+      <body>
+        <h1>This is the <span style="color:green">STABLE</span> version</h1>
+      </body>
+    </html>
