@@ -19,11 +19,11 @@ spec:
       stableService: stable
   selector:
     matchLabels:
-      app: my-app
+      app: stable-ingress
   template:
     metadata:
       labels:
-        app: my-app
+        app: stable-ingress
     spec:
       containers:
       - name: my-app
