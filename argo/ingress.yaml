@@ -17,52 +17,44 @@ metadata:
     external-dns.alpha.kubernetes.io/hostname: argoalb.xfm.sws.siemens.com
     alb.ingress.kubernetes.io/target-type: ip
     kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/actions.header-route: |
+    alb.ingress.kubernetes.io/actions.canary: >
       {
-        "type": "forward",
-        "forwardConfig": {
-          "targetGroups": [
+        "Type": "forward",
+        "ForwardConfig": {
+          "TargetGroups": [
             {
-              "serviceName": "canary-service",
-              "servicePort": "80",
-              "weight": 80
-            },
-            {
-              "serviceName": "stable-service",
-              "servicePort": "80",
-              "weight": 20
+              "ServiceName": "canary",
+              "ServicePort": "80"
             }
           ]
         }
       }
-    alb.ingress.kubernetes.io/conditions.header-route: |
+    alb.ingress.kubernetes.io/conditions.canary: >
       [
         {
-          "field": "http-header",
-          "httpHeaderConfig": {
-            "httpHeaderName": "X-Version",
-            "values": ["true"]
+          "Field": "http-header",
+          "HttpHeaderConfig": {
+            "HttpHeaderName": "X-Version",
+            "Values": ["canary"]
           }
         }
-      ]  
+      ]
 spec:
+  ingressClassName: alb
   rules:
-  - http:
-      paths:
-      # Default path
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: stable
-            port:
-              number: 80
-      
-      # Beta path
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: canary
-            port:
-              number: 80            
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: canary
+                port:
+                  name: use-annotation
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: stable
+                port:
+                  number: 80            
