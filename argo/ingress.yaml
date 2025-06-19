@@ -53,15 +53,17 @@ spec:
   rules:
   - http:
       paths:
+      # Default path (when no conditions match)
       - path: /
         pathType: Prefix
         backend:
           service:
             name: stable
             port:
-              name: use-annotation
+              number: 80
+              
+      # Path for header-based routing
       - path: /
         pathType: Prefix
         backend:
-          backend:
           action: header-route            
