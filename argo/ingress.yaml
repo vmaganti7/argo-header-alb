@@ -61,5 +61,4 @@ spec:
           service:
             name: canary
             port:
-              number: 80
-          action: canary-route               
+              number: 80              
