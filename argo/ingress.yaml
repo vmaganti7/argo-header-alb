@@ -17,10 +17,6 @@ metadata:
     external-dns.alpha.kubernetes.io/hostname: argoalb.xfm.sws.siemens.com
     alb.ingress.kubernetes.io/target-type: ip
     kubernetes.io/ingress.class: alb
-    #alb.ingress.kubernetes.io/conditions.canary: >
-      #[{"field":"http-header","httpHeaderConfig":{"httpHeaderName": "canary", "values":["true"]}}]
-    #alb.ingress.kubernetes.io/conditions.stable: >
-      #[{"field":"http-header","httpHeaderConfig":{"httpHeaderName": "stable", "values":["true"]}}]
     alb.ingress.kubernetes.io/actions.header-route: |
       {
         "type": "forward",
@@ -45,7 +41,7 @@ metadata:
           "field": "http-header",
           "httpHeaderConfig": {
             "httpHeaderName": "X-Version",
-            "values": ["canary"]
+            "values": ["true"]
           }
         }
       ]  
