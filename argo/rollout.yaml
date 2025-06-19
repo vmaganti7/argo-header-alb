@@ -3,30 +3,31 @@ kind: Rollout
 metadata:
   name: my-app-rollout
 spec:
-  replicas: 4
+  replicas: 2
   strategy:
-    canary:
-      steps:
-      - setWeight: 20
-      - pause: {duration: 1h}
-      - setWeight: 40
-      - pause: {duration: 1h}
-      - setWeight: 60
-      - pause: {duration: 1h}
-      - setWeight: 80
-      - pause: {duration: 1h}
-      canaryService: canary
-      stableService: stable
+    blueGreen:
+      activeService: stable
+      previewService: canary
+      autoPromotionEnabled: true
+      autoPromotionSeconds: 60
+      scaleDownDelaySeconds: 30
   selector:
     matchLabels:
-      app: stable-ingress
+      app: my-app
   template:
     metadata:
       labels:
-        app: stable-ingress
+        app: my-app
     spec:
       containers:
       - name: my-app
         image: nginx:1.28.0
         ports:
-        - containerPort: 8080
+        - containerPort: 80
+        volumeMounts:
+        - name: web-content
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: web-content
+        configMap:
+          name: stable-index
