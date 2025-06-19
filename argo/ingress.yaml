@@ -17,33 +17,10 @@ metadata:
     external-dns.alpha.kubernetes.io/hostname: argoalb.xfm.sws.siemens.com
     alb.ingress.kubernetes.io/target-type: ip
     kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/actions.canary: |
-      {
-        "type": "forward",
-        "forwardConfig": {
-          "targetGroups": [
-            {
-              "serviceName": "canary",
-              "servicePort": "80",
-              "weight": 0
-            },
-            {
-              "serviceName": "stable",
-              "servicePort": "80",
-              "weight": 100
-            }
-          ]
-        },
-        "conditions": [
-          {
-            "field": "http-header",
-            "httpHeaderConfig": {
-              "httpHeaderName": "X-Canary",
-              "values": ["true"]
-            }
-          }
-        ]
-      }
+    alb.ingress.kubernetes.io/conditions.canary: >
+      [{"field":"http-header","httpHeaderConfig":{"httpHeaderName": "canary", "values":["true"]}}]
+    alb.ingress.kubernetes.io/conditions.stable: >
+      [{"field":"http-header","httpHeaderConfig":{"httpHeaderName": "stable", "values":["true"]}}]
 spec:
   rules:
   - http:
@@ -54,11 +31,11 @@ spec:
           service:
             name: stable
             port:
-              number: 80
+              name: use-annotation
       - path: /
         pathType: Prefix
         backend:
           service:
             name: canary
             port:
-              number: 80              
+              name: use-annotation              
