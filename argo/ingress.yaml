@@ -58,8 +58,8 @@ spec:
       - path: /
         pathType: Prefix
         backend:
-           service:
+          service:
             name: canary
             port:
               number: 80
-          action: canary-route              
+          action: canary-route               
