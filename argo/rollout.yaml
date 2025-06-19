@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
       - name: my-app
-        image: nginx:1.28.0
+        image: nginx:latest
         ports:
         - containerPort: 80
         volumeMounts:
