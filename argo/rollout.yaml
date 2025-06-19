@@ -8,8 +8,8 @@ spec:
     blueGreen:
       activeService: stable
       previewService: canary
-      autoPromotionEnabled: true
-      autoPromotionSeconds: 60
+      autoPromotionEnabled: false
+      autoPromotionSeconds: 30
       scaleDownDelaySeconds: 30
   selector:
     matchLabels:
