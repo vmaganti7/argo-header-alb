@@ -12,8 +12,8 @@ metadata:
     alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:eu-central-1:238720913587:certificate/0e9fab66-7031-46dd-9014-7a445bc70880"
     alb.ingress.kubernetes.io/scheme: internal
     alb.ingress.kubernetes.io/group.name: "canary-group"
-    #alb.ingress.kubernetes.io/force-target-group-creation: "true"
-    #alb.ingress.kubernetes.io/target-group-name: argoalb-tg
+    alb.ingress.kubernetes.io/force-target-group-creation: "true"
+    alb.ingress.kubernetes.io/target-group-name: argoalb-tg
     external-dns.alpha.kubernetes.io/hostname: argoalb.xfm.sws.siemens.com
     alb.ingress.kubernetes.io/target-type: ip
     kubernetes.io/ingress.class: alb
